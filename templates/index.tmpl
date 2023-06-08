@@ -1,0 +1,27 @@
+<html lang="en">
+    <head>
+        <title>Sizif</title>
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+    </head>
+    <body>
+        <div style="display: flex;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Punishment_sisyph.jpg/220px-Punishment_sisyph.jpg" width="50" height="50">
+            <h1 style="margin: 10px">Sizif</h1>
+        </div>
+        <div class="card">
+          <h5 class="card-header">Jobs</h5>
+          <div class="card-body">
+            {{ range .Jobs }}
+            <div class="card">
+                <div class="card-body">
+                    {{ .Name }} | {{ .Runner }} | {{ .Type }}
+                </div>
+            </div>
+            {{ end }}
+          </div>
+        </div>
+    </body>
+</html>

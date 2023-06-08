@@ -1,0 +1,9 @@
+{
+  "id": "id",
+  "job_id": "id of the job",
+  "timestamp": "timestamp",
+  "container" : "asdadasd",
+  "output": "neki tekst ovo ono",
+  "status": "SUCCESS | FAIL | INTERRUPTED",
+  "message" : "string"
+}

@@ -1,0 +1,15 @@
+version: "3"
+services:
+  db:
+    image: postgres:15.1
+    container_name: sizif-db
+    environment:
+      POSTGRES_DB: sizifdb
+      POSTGRES_USER: sizifUser
+      POSTGRES_PASSWORD: supersecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - sizif-db-volume:/var/lib/postgresql
+volumes:
+  sizif-db-volume: {}

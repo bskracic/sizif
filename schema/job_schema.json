@@ -1,0 +1,8 @@
+{
+  "id": "long-id",
+  "name" : "some name for the job",
+  "runner": "Python",
+  "type": "Scrapper | Transformer | General",
+  "next_job_id": "asdasd | null",
+  "schedule" : "nemam pojma kako to izvest"
+}
