@@ -18,6 +18,7 @@ func New() *gorm.DB {
 			continue
 		}
 		dbInit(db)
+
 		return db
 	}
 }
@@ -26,6 +27,7 @@ func dbInit(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&model.RunnerType{},
 		&model.Job{},
+		&model.Run{},
 	)
 	if err != nil {
 		panic(err)

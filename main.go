@@ -5,8 +5,10 @@ import (
 	"github.com/bskracic/sizif/db/model"
 	"github.com/bskracic/sizif/rest"
 	"github.com/bskracic/sizif/runtime"
+	"github.com/bskracic/sizif/worker"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 //func setAspect(h *rest.Handler) {
@@ -25,8 +27,6 @@ func main() {
 	rnt := runtime.NewDockerRuntime()
 	handler := rest.NewHandler(d, rnt)
 
-	//setAspect(handler)
-
 	router := gin.Default()
 	apiV1 := router.Group("/api/v1/")
 	rest.Bind(apiV1, handler)
@@ -41,5 +41,22 @@ func main() {
 		})
 	})
 
+	w := worker.NewWorker(d, rnt, make(chan uint, 5))
+	ticker := time.NewTicker(1 * time.Second)
+
+	// Create a channel to receive ticks
+	tick := ticker.C
+	// Start a goroutine to run the function
+	go func() {
+		for range tick {
+			w.CheckJobsToSchedule()
+		}
+	}()
+
+	go func() {
+		w.Start()
+	}()
+
 	panic(router.Run(":8080"))
+
 }

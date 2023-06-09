@@ -1,11 +1,11 @@
 package runner
 
-type RunStatus string
+type Status string
 
 const (
-	Interrupted RunStatus = "Interrupted"
-	Failed                = "Failed"
-	Finished              = "Finished"
+	Interrupted Status = "Interrupted"
+	Failed             = "Failed"
+	Finished           = "Finished"
 )
 
 type RunOptions struct {
@@ -17,7 +17,7 @@ type RunResult struct {
 	Stdout   string
 	Message  string
 	ExitCode int
-	Status   RunStatus
+	Status   Status
 }
 
 type Runner interface {
