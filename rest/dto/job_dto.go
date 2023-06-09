@@ -12,7 +12,6 @@ type CreateJobDto struct {
 	RunnerTypeId  uint   `json:"runner_type_id"`
 	Script        string `json:"script"`
 	Type          string `json:"type"`
-	NextJobID     *uint  `json:"next_job_id"`
 	ScheduleUnit  string `json:"schedule_unit"`
 	ScheduleValue int    `json:"schedule_value"`
 }
@@ -30,7 +29,6 @@ func ToJob(c *gin.Context) (*model.Job, error) {
 	j.Script = dto.Script
 	j.RunnerTypeId = dto.RunnerTypeId
 	j.Type = dto.Type
-	//j.NextJobID = dto.NextJobID
 	j.ScheduleValue = dto.ScheduleValue
 	j.ScheduleUnit = dto.ScheduleUnit
 

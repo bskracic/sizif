@@ -42,7 +42,7 @@ func (h *Handler) CreateJob(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	if err := h.Db.Create(&job).Error; err != nil {
+	if err := h.Db.Preload("Runner").Create(&job).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 	c.JSON(http.StatusCreated, job)

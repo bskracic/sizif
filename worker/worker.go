@@ -4,15 +4,18 @@ import (
 	"github.com/bskracic/sizif/db/model"
 	"github.com/bskracic/sizif/runner"
 	"github.com/bskracic/sizif/runtime"
+	"github.com/prometheus/client_golang/prometheus"
 	"gorm.io/gorm"
 	"log"
 	"time"
 )
 
 type Worker struct {
-	db   *gorm.DB
-	rnt  runtime.Runtime
-	jobs chan uint
+	db              *gorm.DB
+	rnt             runtime.Runtime
+	jobs            chan uint
+	TotalJobsRun    prometheus.Counter
+	TotalJobsFailed prometheus.Counter
 }
 
 func NewWorker(db *gorm.DB, rnt runtime.Runtime, jobs chan uint) *Worker {
@@ -48,10 +51,13 @@ func (w *Worker) processJob(jobId uint) {
 	r.Output = rs.Stdout
 	r.Message = rs.Message
 	r.Status = model.ToRunStatus(rs.Status)
+	r.FinishedAt = time.Now()
 	if err := w.db.Save(&r).Error; err != nil {
 		log.Printf("run [%v] for job [%v] failed to save output", r.ID, r.JobId)
 		return
 	}
+
+	w.TotalJobsRun.Inc()
 }
 
 func (w *Worker) CheckJobsToSchedule() {
@@ -66,23 +72,23 @@ func (w *Worker) CheckJobsToSchedule() {
 		if now.After(job.LastRun.Add(getTimeInterval(job.ScheduleUnit, job.ScheduleValue))) {
 			if !w.tryEnqueue(job.ID) {
 				log.Printf("cannot enqueue job: %v \n", job.ID)
+				w.TotalJobsFailed.Inc()
 			}
 		}
 	}
 }
 
 func getTimeInterval(unit string, value int) time.Duration {
-
-	var dur time.Duration
+	var d time.Duration
 	switch unit {
 	case "second":
-		dur = time.Second
+		d = time.Second
 	case "minute":
-		dur = time.Minute
+		d = time.Minute
 	case "hour":
-		dur = time.Hour
+		d = time.Hour
 	}
-	return time.Duration(value) * dur
+	return time.Duration(value) * d
 }
 
 func (w *Worker) tryEnqueue(jobId uint) bool {

@@ -31,5 +31,5 @@ values(101, current_date, null, null, 'Test Job', 'requests', 'print("Hello Worl
        'Scrapper', 'second', 1, 1);
 
 select * from job;
-select * from run;
+select * from run order by finished_at desc;
 delete from run;
